@@ -1,0 +1,71 @@
+
+.signInContainer
+{
+
+
+border: 2px solid rgb(167, 150, 150);
+border-radius: 15px;
+width: 500px;
+margin-left: auto;
+margin-right: auto;
+background-color: rgb(34, 86, 133);
+
+height: auto;
+box-shadow: 2px 15px 50px 15px  rgb(50, 50, 51);
+
+
+}
+
+.imgContainer
+{
+   display: flex;
+   align-items: center;
+   align-content: center;
+   align-self: center;
+    height: 30%;
+    width: 50%;
+   
+    text-align: center;
+    margin: 24px 0 12px 0;
+    /* border: 2px solid white; */
+    margin: 10% 5% 5% 30%; 
+    
+}
+
+img.avatar{
+
+    
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
+}
+
+
+.infoContainer{
+
+    margin: 1% 1% 5% 10%; 
+}
+input{
+    margin-top: 5%;
+    margin-bottom: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    
+}
+
+h1{
+text-align: center;
+color: rgb(218, 201, 201);
+}
+
+button{
+
+text-align: center;
+    margin: 1% 1% 5% 30%; 
+    width: 100px;
+    height: 45px;
+    border-radius: 25px;
+
+}
