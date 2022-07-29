@@ -3,6 +3,9 @@ import {
     faCalendarDays,
     faCar,
     faPerson,
+    faSignOut,
+    faUser,
+    faInfo,
     faPlane,
     faTaxi,
   } from "@fortawesome/free-solid-svg-icons";
@@ -47,7 +50,29 @@ import {
       navigate("/hotels", { state: { destination, date, options } });
     };
 
- 
+    const handleLogout=(()=>
+    {
+
+      navigate('/login')
+    })
+
+    const handleHome=(()=>
+    {
+
+      navigate('/home')
+    })
+
+ const handleBookings=(()=>
+ {
+
+   navigate('/booking')
+ })
+
+ const handleProfile=(()=>
+ {
+
+   navigate('/userProfile')
+ })
   
     return (
       <div className="header">
@@ -56,24 +81,29 @@ import {
             type === "list" ? "headerContainer listMode" : "headerContainer"
           }
         >
-          <div className="headerList">
+          <div className="headerHomeList">
             <div className="headerListItem active">
               <FontAwesomeIcon icon={faBed} />
-              <span>Accomdation</span>
+              <span onClick={handleHome}
+              >Accomdation</span>
+              
             </div>
-            <div className="headerListItem">
-              <FontAwesomeIcon icon={faPlane} />
-              <span>Flights</span>
+            <div className="headerListItem active">
+              <FontAwesomeIcon icon={faInfo} />
+              <span onClick={handleBookings}
+              >Booking</span>
             </div>
-            <div className="headerListItem">
-              <FontAwesomeIcon icon={faCar} />
-              <span>Car rentals</span>
+            <div className="headerListItem active">
+              <FontAwesomeIcon icon={faUser} />
+              <span onClick={handleProfile}
+              >Profile</span>
+            </div>
+            <div className="headerListItem active">
+              <FontAwesomeIcon icon={faSignOut} />
+              <span onClick={handleLogout}
+              >Logout</span>
             </div>
             
-            <div className="headerListItem">
-              <FontAwesomeIcon icon={faTaxi} />
-              <span>Airport taxis</span>
-            </div>
           </div>
           {type !== "list" && (
             <>

@@ -18,3 +18,43 @@
     padding: 0;
  
   }
+
+  .hotel-card{
+
+    width: 700px;
+    height: 500px;
+    border: 2px solid red;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3%;
+    background-color: rgb(153, 168, 168);
+  }
+
+  .img-div{
+    border: 2p solid blue;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 300px;
+  }
+
+
+  .card .hotel_name{
+    font-weight: 500;
+    font-size: 1.4em;
+}
+.card .price{
+    font-weight: 500;
+    font-size: 1.2em;
+}
+.card {
+  margin: 20px 0;
+}
+.card img{
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  max-width: 500px;
+  object-fit: cover;
+  margin: 0 auto;
+}

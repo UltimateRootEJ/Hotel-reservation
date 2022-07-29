@@ -1,17 +1,45 @@
 import '../css/home.css'
 import NavBar from './navbar'
 import Header from './header'
-import Featured from './featured'
-import PropertyList from './propertyList'
-import Footer from './footer'
-import FeaturedProperties from './featuredproperties'
-import MailList from './mailList'
-import { useNavigate } from 'react-router-dom'
-import background from '../images/hotelmg.jpg'
-import Register from './register'
+import { db } from './firebase'
+import { collection, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import Display from './display';
+import UserProfile from './userProfile';
+
+// import Featured from './featured'
+// import PropertyList from './propertyList'
+// import Footer from './footer'
+// import FeaturedProperties from './featuredproperties'
+// import MailList from './mailList'
+// import { useNavigate } from 'react-router-dom'
+// import background from '../images/hotelmg.jpg'
+// import Register from './register'
 
 
 export default function Home() {
+
+
+    const [details, setDetails] = useState([]);
+    useEffect(() => {
+        const hotelCollectionRef = collection(db, "hotels")
+
+        const getDetails = async () => {
+            const data = await getDocs(hotelCollectionRef);
+            setDetails(
+                data.docs.map((doc) => ({
+                    name: doc.data().name,
+                    location: doc.data().location,
+                    price: doc.data().price,
+                    image: doc.data().image,
+                }))
+            );
+        }
+        getDetails();
+    }, []);
+
+    console.log(details);
+
     return (
         <div>
             <div className="homeHeader" >
@@ -19,17 +47,15 @@ export default function Home() {
                 <Header />
             </div>
 
+            <Display />
 
-            <div className="homeContainer" >
-                <Featured />
-                <h1 className="homeTitle">Browse by property type</h1>
-                <PropertyList />
-                <h1 className="homeTitle">Homes guests love</h1>
-                <FeaturedProperties />
-                <MailList />
-                <Footer />
-            </div>
+
+
+
+
+
         </div>
 
     )
 }
+

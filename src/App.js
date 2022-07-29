@@ -8,6 +8,10 @@ import List from "./components/list.js";
 import Hotel from "./components/hotel.js";
 import Login from "./components/login.js";
 import Register from "./components/register.js";
+import Display from "./components/display.js";
+import viewHotel from "./components/detailViewHotel.js";
+import UserProfile from "./components/userProfile.js";
+// import Hotel from "./components/hotel.js";
 import './App.css';
 
 function App() {
@@ -17,9 +21,13 @@ function App() {
         <Route exact path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/hotels" element={<List />} />
-        <Route path="/hotels/:id" element={<Hotel />} />
+        <Route path="/hotel" element={<Hotel />} />
         <Route path="/home" element={<Home />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/display" element={<Display/>} />
+        <Route path="/detailViewHotel" element={<viewHotel/>} />
+        <Route path="/userProfile" element={<UserProfile/>} />
+        {/* <Route path="/hotel" element={<Hotel/>} /> */}
       </Routes>
     </BrowserRouter>
 

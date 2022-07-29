@@ -1,4 +1,25 @@
-.regDiv{
-    background-color:rgb(7, 64, 90);
+
+
+.registerDiv
+{
+    border: 2px solid rgb(167, 150, 150);
+    border-radius: 15px;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(211, 214, 218);
+    margin-top: 2%;
+    height: auto;
+    box-shadow: 2px 15px 50px 15px  rgb(50, 50, 51);
 
 }
+
+input{
+    border-radius: 25px;
+    width: 280px;
+    height: 35px;
+}
+
+.regH1{
+    color: rgb(55, 50, 58);}
+

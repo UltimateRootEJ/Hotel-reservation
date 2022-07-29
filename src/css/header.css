@@ -16,7 +16,7 @@
     margin: 20px 0px 0px 0px;
   }
   
-  .headerList {
+  .headerHomeList {
     display: flex;
     gap: 40px;
     margin-bottom: 50px;
@@ -36,6 +36,8 @@
   
   .headerDesc {
     margin: 20px 0px;
+    margin-left: auto;
+    margin-left: 24%;
   }
   
   .headerBtn {
@@ -125,5 +127,9 @@
   
   .optionCounterButton:disabled {
     cursor: not-allowed;
+  }
+
+  span{
+    cursor: pointer;
   }
   
