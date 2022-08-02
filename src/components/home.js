@@ -19,7 +19,7 @@ import UserProfile from './userProfile';
 
 export default function Home() {
 
-
+// javascirpt. no need for a script
     const [details, setDetails] = useState([]);
     useEffect(() => {
         const hotelCollectionRef = collection(db, "hotels")
@@ -40,11 +40,17 @@ export default function Home() {
 
     console.log(details);
 
+    
+
     return (
         <div>
             <div className="homeHeader" >
-                <NavBar />
+
+                {/*These are components inside home component
+                  */}
+                <NavBar/>    
                 <Header />
+        
             </div>
 
             <Display />

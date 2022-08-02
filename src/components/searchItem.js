@@ -3,24 +3,28 @@ import { faLocation, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { db } from './firebase';
 import { useState, useEffect } from 'react';
-import { collection, onSnapshot, orderBy, query,WhereFilterOp } from "firebase/firestore";
+import { Link,useLocation } from 'react-router-dom';
+import { collection, onSnapshot, orderBy, query,WhereFilterOp,where } from "firebase/firestore";
 
 export default function SearchItem() {
 
   const [hotels, setSetHotels] = useState([]);
+  const location = useLocation();
+  const [destination, setDestination] = useState(location.state.destination);
+  console.log(destination)
 
 
   useEffect(() => {
     const collectionRef = collection(db, "hotels");
     
-    const q = query(collectionRef, orderBy("location", "desc"));
+    const q = query(collectionRef, where("location", "==",destination));
     onSnapshot(q, (snapshot) => {
       const hotels = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setSetHotels(hotels);
-      console.log(hotels);
+   
     });
   }, []);
 
@@ -70,7 +74,9 @@ export default function SearchItem() {
         <div className="siDetailTexts">
           <span className="siPrice">R {price}</span>
           <span className="siTaxOp">Includes taxes and fees</span>
-          <button className="siCheckButton">See availability</button>
+          <Link to={`/hotel/${id}`}>
+            <button  className="siCheckButton">See availability</button>
+            </Link>
         </div>
       </div>
     </div>

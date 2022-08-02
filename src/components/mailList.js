@@ -7,7 +7,8 @@ export default function MailList()
         backgroundImage:`url(${background})`,
         backgroundRepeat:'no-repeat',
         backgroundSize:'cover',
-        height:'30vh'
+        height:'25vh',
+        marginBottom:'2%',
     }
 
     return(

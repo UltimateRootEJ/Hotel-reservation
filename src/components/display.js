@@ -2,9 +2,12 @@ import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import '../css/display.css'
 import { faLocation,faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { db } from "./firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Footer from "./footer";
+import MailList from "./mailList";
+
 
 
 
@@ -73,7 +76,9 @@ navigate('/hotel')
           <div className="siDetailTexts">
             <span className="siPrice">R {price}</span>
             <span className="siTaxOp">Includes taxes and fees</span>
-            <button  className="siCheckButton" onClick={ handleHotel}>See availability</button>
+            <Link to={`/hotel/${id}`}>
+            <button  className="siCheckButton">See availability</button>
+            </Link>
           </div>
         </div>
       </div>
@@ -81,6 +86,7 @@ navigate('/hotel')
           )
         )
       )}
+      <MailList/>
     </div>
   );
 }

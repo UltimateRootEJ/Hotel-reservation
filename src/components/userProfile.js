@@ -2,7 +2,7 @@ import "../css/userProfile.css"
 import { useState, useEffect } from "react";
 import { db, auth } from "./firebase";
 import Menu from "./menu";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs ,updateDoc,doc} from "firebase/firestore";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { async } from "@firebase/util";
@@ -46,8 +46,7 @@ const UserProfile = () => {
         console.log(user)
         console.log(auth.currentUser.uid)
 
-        //s5TIrTAY9NX8LQeINNw65nNuJzw2 //Steve@gmail.com
-        // console.log(user)
+   
     }
 
     // console.log(auth.currentUser.uid)
@@ -59,6 +58,17 @@ const UserProfile = () => {
     const close = () => {
         document.querySelector(".edit").style.display = "none";
     }
+
+    // const updateProfileDetails=(()=>{
+    //     const hotelDoc = doc(db, "users");
+    //     const newUserDetails={
+    //         name:name,
+    //         surname:surname,
+    //         location:location,
+    //         email:email
+
+    //     }
+    // })
 
 
 

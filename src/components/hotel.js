@@ -3,143 +3,348 @@ import NavBar from "./navbar";
 import Header from "./header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MailList from "./mailList";
+import '../css/hotel.css'
 import Footer from "./footer";
+import { useParams } from "react-router-dom";
 import {
   faCircleArrowLeft,
   faCircleArrowRight,
   faCircleXmark,
   faLocationDot,
+  faPerson,
+  faCalendar,
+  faCalendarDays
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { doc, getDoc,getDocs } from "firebase/firestore";
+import { db, auth } from "./firebase";
+import { collection, addDoc } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { DateRange } from "react-date-range";
+import "react-date-range/dist/styles.css"; // main css file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import { format } from "date-fns";
 
-export default function Hotel()
-{
-    const [slideNumber, setSlideNumber] = useState(0);
-    const [open, setOpen] = useState(false);
-  
-    const photos = [
-      {
-        src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg?k=56ba0babbcbbfeb3d3e911728831dcbc390ed2cb16c51d88159f82bf751d04c6&o=&hp=1",
-      },
-      {
-        src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707367.jpg?k=cbacfdeb8404af56a1a94812575d96f6b80f6740fd491d02c6fc3912a16d8757&o=&hp=1",
-      },
-      {
-        src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261708745.jpg?k=1aae4678d645c63e0d90cdae8127b15f1e3232d4739bdf387a6578dc3b14bdfd&o=&hp=1",
-      },
-      {
-        src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707776.jpg?k=054bb3e27c9e58d3bb1110349eb5e6e24dacd53fbb0316b9e2519b2bf3c520ae&o=&hp=1",
-      },
-      {
-        src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261708693.jpg?k=ea210b4fa329fe302eab55dd9818c0571afba2abd2225ca3a36457f9afa74e94&o=&hp=1",
-      },
-      {
-        src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707389.jpg?k=52156673f9eb6d5d99d3eed9386491a0465ce6f3b995f005ac71abc192dd5827&o=&hp=1",
-      },
-    ];
-  
-    const handleOpen = (i) => {
-      setSlideNumber(i);
-      setOpen(true);
-    };
-  
-    const handleMove = (direction) => {
-      let newSlideNumber;
-  
-      if (direction === "l") {
-        newSlideNumber = slideNumber === 0 ? 5 : slideNumber - 1;
+export default function Hotel() {
+
+  const { id } = useParams()
+
+
+
+
+  const getDocDetails = async (id) => {
+    const docref = doc(db, 'hotels', id)
+    try {
+      const docSnap = await getDoc(docref);
+      if (docSnap.exists()) {
+
+        setHotels(docSnap.data())
       } else {
-        newSlideNumber = slideNumber === 5 ? 0 : slideNumber + 1;
+
       }
-  
-      setSlideNumber(newSlideNumber)
-    };
-  
-    return (
-      <div>
-        <NavBar />
-        <Header type="list" />
-        <div className="hotelContainer">
-          {open && (
-            <div className="slider">
-              <FontAwesomeIcon
-                icon={faCircleXmark}
-                className="close"
-                onClick={() => setOpen(false)}
-              />
-              <FontAwesomeIcon
-                icon={faCircleArrowLeft}
-                className="arrow"
-                onClick={() => handleMove("l")}
-              />
-              <div className="sliderWrapper">
-                <img src={photos[slideNumber].src} alt="" className="sliderImg" />
-              </div>
-              <FontAwesomeIcon
-                icon={faCircleArrowRight}
-                className="arrow"
-                onClick={() => handleMove("r")}
+
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  useEffect(() => {
+    getDocDetails(id)
+
+  }, [])
+
+
+  const [hotels, setHotels] = useState([]);
+
+  //setting dates   
+  const [destination, setDestination] = useState("");
+  const [sum, setSum] = useState(0)
+  const [sumDays, setSumDays] = useState(0)
+  const [openDate, setOpenDate] = useState(false);
+  const [date, setDate] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
+  const [openOptions, setOpenOptions] = useState(false);
+  const [options, setOptions] = useState({
+    adult: 1,
+    children: 0,
+    room: 1,
+  });
+
+  //handling options
+  const handleOption = (name, operation) => {
+    setOptions((prev) => {
+      return {
+        ...prev,
+        [name]: operation === "i" ? options[name] + 1 : options[name] - 1,
+      };
+    });
+  };
+
+  const handleSum = (() => {
+
+
+
+    const rateChild = 100;
+
+    const diffdAYS = date[0].endDate - date[0].startDate;
+    const days = diffdAYS / (1000 * 60 * 60 * 24);
+    setSumDays(days);
+
+
+
+
+    const numAdults = options.adult;
+    const price = parseFloat(hotels.price)
+    const numChildren = options.children;
+    const numRooms = options.room;
+
+    const finalAmount = ((numRooms + sumDays) * price)
+
+    setSum(finalAmount)
+    console.log(setSum)
+
+  })
+
+
+  const [users, setUsers] = useState([]);
+  const[currentUser,setCurrentUser]=useState([]);
+
+
+  useEffect(() => {
+      const userCollectionRef = collection(db, "users")
+
+      const getUsers = async () => {
+          const data = await getDocs(userCollectionRef);
+          setUsers(
+              data.docs.map((doc) => ({
+                  name: doc.data().name,
+                  location: doc.data().location,
+                  userId: doc.data().userId,
+                  email: doc.data().email,
+                  surname: doc.data().surname,
+              }))
+          );
+      }
+      getUsers();
+  }, []);
+
+  let user = [];
+  for (let i = 0; i < users.length; i++) {
+      if (users[i].userId === auth.currentUser.uid) {
+          user.push(users[i]);
+          // setCurrentUser(user);
+
+      }
+       console.log(user[0])
+   
+
+      //s5TIrTAY9NX8LQeINNw65nNuJzw2 //Steve@gmail.com
+      // console.log(user)
+  }
+
+  const handleBooking = (() => {
+    const collectionRef = collection(db, "bookings");
+    addDoc(collectionRef, {
+
+      hotelId: id,
+      numAdults: options.adult,
+      numChildren : options.children,
+      numRooms: options.room,
+      sumDays: sumDays,
+      sum: sum,
+      image:hotels.image,
+      hotelName:hotels.name,
+      hotelLocation:hotels.location,
+      userId: auth.currentUser.uid,
+      name:user[0].name,
+      surname:user[0].surname,
+      email:user[0].email,
+   
+
+    })
+      .then(() => {
+        alert("Hotel added successfully", { type: "success" });
+
+      })
+      .catch((err) => {
+        alert("Error adding hotel", { type: "error" });
+      });
+
+
+
+    // };
+
+    // addDoc(collectionRef, booking).then(() => {
+    //   alert("added successfully")
+    // }).catch((error) => { console.log(error); alert("Error while adding") })
+
+
+  })
+
+
+  return (
+    <div>
+      <NavBar />
+      <Header type="list" />
+      <div className="hotelContainer">
+
+        <div className="hotelWrapper">
+          <h1 className="hotelTitle">{hotels.name}</h1>
+          <div className="hotelAddress">
+            <FontAwesomeIcon icon={faLocationDot} />
+            <span>{hotels.location}</span>
+          </div>
+          <span className="hotelDistance">
+            Excellent location
+          </span>
+          
+          <div className="hotelImages">
+
+            <div className="hotelImgWrapper" >
+              <img
+
+                src={hotels.image}
+                alt=""
+                className="hotelImg"
               />
             </div>
-          )}
-          <div className="hotelWrapper">
-            <button className="bookNow">Reserve or Book </button>
-            <h1 className="hotelTitle">Tower Street Apartments</h1>
-            <div className="hotelAddress">
-              <FontAwesomeIcon icon={faLocationDot} />
-              <span>Elton St 125 New york</span>
-            </div>
-            <span className="hotelDistance">
-              Excellent location – 5000m from center
-            </span>
-            <span className="hotelPriceHighlight">
-              Book a stay over $114 at this property and get a free airport taxi
-            </span>
-            <div className="hotelImages">
-              {photos.map((photo, i) => (
-                <div className="hotelImgWrapper" key={i}>
-                  <img
-                    onClick={() => handleOpen(i)}
-                    src={photo.src}
-                    alt=""
-                    className="hotelImg"
-                  />
+            <div className="hotelDetailsPrice">
+
+              <h1>Perfect for a 9-night stay!</h1>
+              <div className="handleDates">
+
+                <div className="BookingDates">
+                  <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" />
+                  <span
+                    onClick={() => setOpenDate(!openDate)}
+                    className="headerSearchText"
+                  >{`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(
+                    date[0].endDate,
+                    "MM/dd/yyyy"
+                  )}`}</span>
+                  {openDate && (
+                    <DateRange
+                      editableDateInputs={true}
+                      onChange={(item) => setDate([item.selection])}
+
+                      moveRangeOnFirstSelection={false}
+                      ranges={date}
+                      className="date"
+                      minDate={new Date()}
+                    />
+                  )}
                 </div>
-              ))}
-            </div>
-            <div className="hotelDetails">
-              <div className="hotelDetailsTexts">
-                <h1 className="hotelTitle">Stay in the heart of City</h1>
-                <p className="hotelDesc">
-                  Located a 5-minute walk from St. Florian's Gate in Krakow, Tower
-                  Street Apartments has accommodations with air conditioning and
-                  free WiFi. The units come with hardwood floors and feature a
-                  fully equipped kitchenette with a microwave, a flat-screen TV,
-                  and a private bathroom with shower and a hairdryer. A fridge is
-                  also offered, as well as an electric tea pot and a coffee
-                  machine. Popular points of interest near the apartment include
-                  Cloth Hall, Main Market Square and Town Hall Tower. The nearest
-                  airport is John Paul II International Kraków–Balice, 16.1 km
-                  from Tower Street Apartments, and the property offers a paid
-                  airport shuttle service.
-                </p>
+                <div className="BookingDates">
+                  <FontAwesomeIcon icon={faPerson} className="headerIcon" />
+                  <span
+                    onClick={() => setOpenOptions(!openOptions)}
+                    className="headerSearchText"
+                  >{`${options.adult} adult · ${options.children} children · ${options.room} room`}</span>
+                  {openOptions && (
+                    <div className="options">
+                      <div className="optionItem">
+                        <span className="optionText">Adult</span>
+                        <div className="optionCounter">
+                          <button
+                            disabled={options.adult <= 1}
+                            className="optionCounterButton"
+                            onClick={() => handleOption("adult", "d")}
+                          >
+                            -
+                          </button>
+                          <span className="optionCounterNumber">
+                            {options.adult}
+                          </span>
+                          <button
+                            className="optionCounterButton"
+                            onClick={() => handleOption("adult", "i")}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <div className="optionItem">
+                        <span className="optionText">Children</span>
+                        <div className="optionCounter">
+                          <button
+                            disabled={options.children <= 0}
+                            className="optionCounterButton"
+                            onClick={() => handleOption("children", "d")}
+                          >
+                            -
+                          </button>
+                          <span className="optionCounterNumber">
+                            {options.children}
+                          </span>
+                          <button
+                            className="optionCounterButton"
+                            onClick={() => handleOption("children", "i")}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <div className="optionItem">
+                        <span className="optionText">Room</span>
+                        <div className="optionCounter">
+                          <button
+                            disabled={options.room <= 1}
+                            className="optionCounterButton"
+                            onClick={() => handleOption("room", "d")}
+                          >
+                            -
+                          </button>
+                          <span className="optionCounterNumber">
+                            {options.room}
+                          </span>
+                          <button
+                            className="optionCounterButton"
+                            onClick={() => handleOption("room", "i")}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="BookingDates">
+                  <button className="calculateBtn" onClick={handleSum}>
+                    Calculate
+                  </button>
+                </div>
               </div>
-              <div className="hotelDetailsPrice">
-                <h1>Perfect for a 9-night stay!</h1>
-                <span>
-                  Located in the real heart of Krakow, this property has an
-                  excellent location score of 9.8!
-                </span>
-                <h2>
-                  <b>$945</b> (9 nights)
-                </h2>
-                <button>Reserve or Book Now!</button>
-              </div>
+              <span>
+                Days: {sumDays} Children: {options.children} Adults:{options.adult} Rooms: {options.room}
+              </span>
+              <h2>
+                <b>R{hotels.price}</b> (per night  )
+
+                (:Amount Due: <b>R{sum}</b> )
+              </h2>
+              {/* <label>
+                <b>R{hotels.price}</b> (per night)
+              </label> */}
+              <button onClick={handleBooking}>Book Now!</button>
             </div>
           </div>
-          <MailList />
-          <Footer />
+          <div className="hotelDetails">
+            <div className="hotelDetailsTexts">
+              <h1 className="hotelTitle">Description</h1>
+              <p className="hotelDesc">{hotels.description}
+              </p>
+            </div>
+
+          </div>
         </div>
+
       </div>
-    );
+
+
+    </div>
+
+  );
 }

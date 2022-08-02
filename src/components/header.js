@@ -12,10 +12,11 @@ import {
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import "../css/header.css";
   import { DateRange } from "react-date-range";
-  import { useState } from "react";
   import "react-date-range/dist/styles.css"; // main css file
   import "react-date-range/dist/theme/default.css"; // theme css file
   import { format } from "date-fns";
+  import { useState } from "react";
+ 
   import { useNavigate } from "react-router-dom";
   
   const Header = ({ type }) => {
