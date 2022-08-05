@@ -197,9 +197,7 @@ export default function Hotel() {
             <FontAwesomeIcon icon={faLocationDot} />
             <span>{hotels.location}</span>
           </div>
-          <span className="hotelDistance">
-            Excellent location
-          </span>
+        
           
           <div className="hotelImages">
 

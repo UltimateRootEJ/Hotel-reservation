@@ -15,7 +15,7 @@ const UserProfile = () => {
     const [password, setPassword] = useState('')
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('')
-    const [location, setLocation] = useState('')
+    const [cellphone, setcellphone] = useState('')
     const [users, setUsers] = useState([]);
 
 
@@ -27,7 +27,7 @@ const UserProfile = () => {
             setUsers(
                 data.docs.map((doc) => ({
                     name: doc.data().name,
-                    location: doc.data().location,
+                    cellphone: doc.data().cellphone,
                     userId: doc.data().userId,
                     email: doc.data().email,
                     surname: doc.data().surname,
@@ -64,7 +64,7 @@ const UserProfile = () => {
     //     const newUserDetails={
     //         name:name,
     //         surname:surname,
-    //         location:location,
+    //         cellphone:cellphone,
     //         email:email
 
     //     }
@@ -105,9 +105,9 @@ const UserProfile = () => {
             <br></br>
             <input
              
-             value={inf.location}
-              placeholder="Location"
-              onChange={(e) => setLocation(e.target.value)}
+             value={inf.cellphone}
+              placeholder="cellphone"
+              onChange={(e) => setcellphone(e.target.value)}
             ></input>{" "}
             <br></br> <input
              value={inf.email}
@@ -135,7 +135,7 @@ const UserProfile = () => {
                         <div className="username"><h3>{inf.name}</h3></div>
                         <div className="username"><h3>{inf.surname}</h3></div>
                         <div className="username"><h3>{inf.email}</h3></div>
-                        <div className="username"><h3>{inf.location}</h3>
+                        <div className="username"><h3>{inf.cellphone}</h3>
                         </div>
 
                      

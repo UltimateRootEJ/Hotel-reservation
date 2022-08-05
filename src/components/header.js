@@ -108,12 +108,7 @@ import {
           </div>
           {type !== "list" && (
             <>
-              <h1 className="headerTitle">
-                Enjoy your Lixurious stay with us.
-              </h1>
-              <p className="headerDesc">
-                Participate in our weekly surveys to stand a chance to win 50% off your booking.
-              </p>
+           
         
               <div className="headerSearch">
                 <div className="headerSearchItem">

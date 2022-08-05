@@ -1,8 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword,sendPasswordResetEmail } from 'firebase/auth';
 import { auth,db } from './firebase';
+import { collection } from "firebase/firestore";
 import LoginHeader from "./loginHeader";
 import NavBarL from "./loginNavBar";
 import '../css/login.css'
@@ -26,6 +27,21 @@ const[email,setEmail]=useState('');
 const[password,setPassword]=useState('')
 
 
+const handleForgotPass=(()=>{
+    const collectionRef = collection(db, "users");
+    sendPasswordResetEmail(auth, email).then((userCredentials) => {
+        console.log(email)
+    })
+    
+})
+
+
+const handleResetPass = async () => {
+    document.querySelector(".reset").style.display = "block";
+}
+const close = () => {
+    document.querySelector(".reset").style.display = "none";
+}
 
 const handleLogin=(()=>
 {
@@ -70,12 +86,48 @@ signInWithEmailAndPassword(auth,email,password).then((userCredential)=>
                     <span className="errorSpan"  id="err2">Password is required!!! </span>
                     <button id="btnSignIn" onClick={handleLogin} >Sign In</button>
                     <br></br>
-                    <span>Don't have an account?<span onClick={handleRegister}> Register here</span> </span>
+                    <span  onClick={handleResetPass}>Forgot password?<span> Reset here</span> </span>
+                    <br></br>
+                    <span onClick={handleRegister}>Don't have an account?<span > Register here</span> </span>
+
+
+                    <div className="reset" style={{display:'none'}}>
+                            
+                            <h2 className="close" onClick={close}>
+          x
+        </h2>{" "}
+        <br></br>
+        <h2>Reset password</h2>
+        <br></br>
+        <input
+       
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        ></input>{" "}
+        <br></br> 
+        <br></br>
+        <br></br>
+        <br></br>
+
+        {/* <input
+          type="file"
+          id="file"
+          accept="image/*"
+          onChange={handleChange}
+        />*/}
+        <button
+          className="btnSignIn"
+          onClick={handleForgotPass}
+        
+        >
+          Reset
+        </button> 
+                    </div>
 
                 </div>
 
             </div>
-            <Footer />
+           
         </div>
 
     );

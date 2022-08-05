@@ -56,17 +56,13 @@ navigate('/hotel')
         <div className="siDesc">
           <h1 className="siTitle">{name}</h1>
           <span className="siDistance"><FontAwesomeIcon icon={faLocationDot }/> {location}</span>
-          <span className="siTaxiOp">Free airport taxi</span>
+
           <span className="siSubtitle">
             {description}
           </span>
-          <span className="siFeatures">
-            Entire studio • 1 bathroom • 21m² 1 full bed
-          </span>
-          <span className="siCancelOp">Free cancellation </span>
-          <span className="siCancelOpSubtitle">
-            You can cancel later, so lock in this great price today!
-          </span>
+       
+          <span className="siTaxiOp">Free cancellation </span>
+        
         </div>
         <div className="siDetails">
           <div className="siRating">

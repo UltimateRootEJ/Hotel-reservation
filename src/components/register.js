@@ -2,7 +2,7 @@ import LoginHeader from './loginHeader'
 import NavBarL from './loginNavBar'
 import '../css/register.css'
 import { useNavigate } from 'react-router-dom'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword , sendPasswordResetEmail,confirmPasswordReset} from 'firebase/auth'
 import { useState } from 'react'
 import { auth, db } from './firebase'
 import { addDoc } from 'firebase/firestore'
@@ -17,7 +17,7 @@ export default function Register() {
     const [password, setPassword] = useState('')
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('')
-    const [location, setLocation] = useState('')
+    const [cellphone, setcellphone] = useState('')
 
     const navigate = useNavigate();
 
@@ -25,6 +25,8 @@ export default function Register() {
     const handleLogin = (() => {
         navigate("/")
     })
+
+
 
     const handleRegister = (() => {
         const collectionRef = collection(db, "users");
@@ -36,7 +38,7 @@ export default function Register() {
             surname: surname,
             email: email,
             userId: auth.currentUser.uid,
-            location: location
+            cellphone: cellphone
 
         };
         console.log(user.userId)
@@ -62,7 +64,7 @@ export default function Register() {
                 <input type="text" placeholder='Please enter your name' onChange={(e) => setName(e.target.value)} />
                 <input type="text" placeholder='Please enter your surname' onChange={(e) => setSurname(e.target.value)} />
                 <input type="email" placeholder='Please enter your email' onChange={(e) => setEmail(e.target.value)} />
-                <input type="text" placeholder='Please enter Location' onChange={(e) => setLocation(e.target.value)} />
+                <input type="number" placeholder='Please enter cellphone' onChange={(e) => setcellphone(e.target.value)} />
                 <input type="password" placeholder='Please enter your password' onChange={(e) => setPassword(e.target.value)} />
 
                 <button className="btnReg" onClick={handleRegister} >Register</button>
